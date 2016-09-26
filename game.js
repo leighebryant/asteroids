@@ -40,6 +40,11 @@
         console.log(event.keyCode);
 
         // Implement me!
+        //switch(event.keyCode)
+        // //case 37 :
+        // if (ship velocity <=5){
+        //   ship
+        // }
         function handleKeys(event) {
             console.log(event.keyCode);
 
@@ -79,7 +84,7 @@
 
 
         }
-        document.querySelector('body').addEventListener('keyup', handleKeys);
+        document.querySelector('body').addEventListener('keydown', handleKeys);
 
         /**
          * This is the primary "game loop"... in traditional game development, things
@@ -95,12 +100,12 @@
             // What does this function return? What will be in the `move` variable?
             // Read the documentation!
 
-        // Move the ship here!
+            // Move the ship here!
 
-
+// parse.int
             // Time to check for any collisions (see below)...
-            checkForCollisions();
-        }
+        //     checkForCollisions();
+        // }
 
         /**
          * This function checks for any collisions between asteroids and the ship.
