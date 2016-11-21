@@ -1,2 +1,4 @@
 # asteroids
-The beginnings of the Asteroids game for use in teaching JavaScript at The Iron Yard
+The beginnings of the Asteroids game for use in teaching JavaScript at The Iron Yard.
+
+https://leighebryant.github.io/asteroids/
