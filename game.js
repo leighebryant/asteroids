@@ -1,13 +1,16 @@
 (function gameSetup() {
     'use strict';
+
     // Create your "ship" object and any other variables you might need...
+
+
+
     var ship = {
         velocity: 0,
         angle: 0,
         element: document.getElementById('ship')
-    }
-
-    ship.element.style.top = "350px";
+    };
+    ship.element.style.top = "300px";
     ship.element.style.left = "600px";
 
     var asteroids = [];
@@ -17,10 +20,17 @@
     ship.element.addEventListener('asteroidDetected', function(event) {
 
 
-        // You can detect when a new asteroid appears with this event.
-        // The new asteroid's HTML element will be in:  event.detail
-        // What might you need/want to do in here?
         asteroids.push(event.detail);
+
+
+
+
+
+        // if(event.detail)
+        // You can detect when a new asteroid appears with this event.
+        // The new HTML element will be in event.detail
+
+        // What might you need/want to do in here?
 
     });
 
@@ -38,127 +48,112 @@
      */
     function handleKeys(event) {
         console.log(event.keyCode);
+        if (event.keyCode === 38) {
+            if (ship.velocity >= 10) {
+                ship.velocity = 10;
+                console.log(ship.velocity);
+            } else {
+                ship.velocity = ship.velocity + 1;
+                console.log(ship.velocity);
+            }
 
+        }
+        if (event.keyCode === 40) {
+            if (ship.velocity <= 0) {
+                ship.velocity = 0;
+                console.log(ship.velocity);
+            } else {
+                ship.velocity = ship.velocity - 1;
+                console.log(ship.velocity);
+            }
+        }
+        if (event.keyCode === 37) {
+            ship.angle = ship.angle - 15;
+            ship.element.style.transform = "rotate(" + ship.angle + "deg)";
+            console.log(ship.angle);
+            console.log(ship.element.style.transform);
+        }
+        if (event.keyCode === 39) {
+            ship.angle = ship.angle + 15;
+            ship.element.style.transform = "rotate(" + ship.angle + "deg)";
+            console.log(ship.angle);
+        }
         // Implement me!
-        //switch(event.keyCode)
-        // //case 37 :
-        // if (ship velocity <=5){
-        //   ship
-        // }
-        function handleKeys(event) {
-            console.log(event.keyCode);
-
-            if (event.keyCode === 37) {
-                ship.angle = ship.angle - 15;
-                ship.element.style.transform =  ship.angle + 15;
-                console.log(ship.angle);
-                console.log(ship.element.style.transform);
-            }
-
-            if (event.keyCode === 38) {
-                if (ship.velocity >= 10)
-                    ship.velocity = 10;
-                    console.log(ship.velocity);
-                } else {
-                    ship.velocity = ship.velocity + 1;
-                    console.log(ship.velocity);
-                }
-
-            }
-
-            if (event.keyCode === 39) {
-                ship.angle = ship.angle + 15;
-                ship.element.style.transform = "rotate(" + ship.angle + "degree)";
-                console.log(ship.angle);
-            }
-
-            if (event.keyCode === 40) {
-                if (ship.velocity <= 0) {
-                    ship.velocity = 0;
-                    console.log(ship.velocity);
-                } else {
-                    ship.velocity = ship.velocity - 1;
-                    console.log(ship.velocity);
-                }
-            }
 
 
-        }
-        document.querySelector('body').addEventListener('keydown', handleKeys);
+        // getShipMovement(ship.velocity, ship.angle);
+        // console.log(getShipMovement(ship.velocity, ship.angle));
 
-        /**
-         * This is the primary "game loop"... in traditional game development, things
-         * happen in a loop like this. This function will execute every 20 milliseconds
-         * in order to do various things. For example, this is when all game entities
-         * (ships, etc) should be moved, and also when things like hit detection happen.
-         *
-         * @return {void}
-         */
-        function gameLoop() {
-            // This function for getting ship movement is given to you (at the bottom).
-            // NOTE: you will need to change these arguments to match your ship object!
-            // What does this function return? What will be in the `move` variable?
-            // Read the documentation!
-
-            // Move the ship here!
-
-// parse.int
-            // Time to check for any collisions (see below)...
-        //     checkForCollisions();
-        // }
-
-        /**
-         * This function checks for any collisions between asteroids and the ship.
-         * If a collision is detected, the crash method should be called with the
-         * asteroid that was hit:
-         *    crash(someAsteroidElement);
-         *
-         * You can get the bounding box of an element using:
-         *    someElement.getBoundingClientRect();
-         *
-         * A bounding box is an object with top, left, width, and height properties
-         * that you can use to detect whether one box is on top of another.
-         *
-         * @return void
-         */
-        function checkForCollisions(ship, asPos) {
-
-            // Implement me!
-            for (var i = 0; i < asteroids.length; i++) {
-                var asteroidPosition = asPos[i].getBoundingClientRect();
-                if (!(asteroidPosition.left > ship.right ||
-                        asteroidPosition.right < ship.left ||
-                        asteroidPosition.top > ship.bottom ||
-                        asteroidPosition.bottom < ship.top)) {
-                    crash(asteroids[i]);
-
-                    console.log("CRASH");
-
-                }
-
-            }
-        }
     }
-
+    document.querySelector('body').addEventListener('keyup', handleKeys);
 
     /**
-     * This event handler will execute when a crash occurs
+     * This event handler will execute when a crash occurs, however
+     * YOU MUST call the crash() function when you detect a crash (see below).
      *
      * return {void}
      */
     document.querySelector('main').addEventListener('crash', function() {
-        console.log('A crash occurred!');
+
+        ship.velocity = 0;
 
         // What might you need/want to do in here?
-        ship.velocity = 0;
+
     });
 
+    /**
+     * This is the primary "game loop"... in traditional game development, things
+     * happen in a loop like this. This function will execute every 20 milliseconds
+     * in order to do various things. For example, this is when all game entities
+     * (ships, etc) should be moved, and also when things like hit detection happen.
+     *
+     * @return {void}
+     */
+    function gameLoop() {
+        // This function for getting ship movement is given to you (at the bottom).
+        // NOTE: you will need to change these arguments to match your ship object!
+        var move = getShipMovement(ship.velocity, ship.angle);
+        ship.element.style.top = (parseInt(ship.element.style.top) - move.top) + "px";
+        ship.element.style.left = (parseInt(ship.element.style.left) + move.left) + "px";
+        // Move the ship!
+        // Time to check for any collisions (see below)...
+        checkForCollisions(ship.element.getBoundingClientRect(), asteroids);
 
+
+    }
+
+    /**
+     * This function checks for any collisions between asteroids and the ship.
+     * If a collision is detected, the crash method should be called with the
+     * asteroid that was hit:
+     *    crash(someAsteroidElement);
+     *
+     * You can get the bounding box of an element using:
+     *    someElement.getBoundingClientRect();
+     *
+     * A bounding box is an object with top, left, width, and height properties
+     * that you can use to detect whether one box is on top of another.
+     *
+     * @return void
+     */
+    function checkForCollisions(ship, astroPosition) {
+        for (var index = 0; index < asteroids.length; index++) {
+            var asteroidPosition = astroPosition[index].getBoundingClientRect();
+            if (!(asteroidPosition.left > ship.right ||
+                    asteroidPosition.right < ship.left ||
+                    asteroidPosition.top > ship.bottom ||
+                    asteroidPosition.bottom < ship.top)) {
+                crash(asteroids[index]);
+
+                console.log("A crash occurred!!");
+
+            }
+
+        }
+    }
 
     /** ************************************************************************
-     *             These functions and code are given to you.
-     *
-     *                   !!! DO NOT EDIT BELOW HERE !!!
+     *       These functions and code are given to you. DO NOT ALTER THEM.
      ** ************************************************************************/
 
     var loopHandle = setInterval(gameLoop, 20);
@@ -196,5 +191,4 @@
             top: (velocity * Math.cos(angle * Math.PI / 180))
         };
     }
-
 })();
